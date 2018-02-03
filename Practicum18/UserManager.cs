@@ -7,104 +7,124 @@ using System.IO;
 
 namespace Practicum18
 {
-    class UserManager
+    class UserManager : Exception
     {
         public UserManager()
         {
             Users = new List<User>();
-            UserLoggedIn = false;
+
         }
-
-
-
 
         private const string userPath = "Users.Txt";
         public List<User> Users { get; set; }
-        private bool UserLoggedIn { get; set; }
+
+
+
 
         public User Login(string login, string pw)
         {
             var okUser = Users.FirstOrDefault(u => u.Login == login && u.Paswoord == pw);
-            UserLoggedIn = true;
+            if(okUser == null)
+            {
+                throw new Exception("User does not exist");
+            }
             return okUser;
         }
 
-        public void LogOut()
-        {
-            UserLoggedIn = false;
-        }
 
 
         public UserState AddUser(User user)
         {
 
+
+            if (string.IsNullOrWhiteSpace(user.Login))
+            {
+                throw new Exception("User login can not be emtpy");
+            }
+
             if (HasSpecialCharacters(user.Login)) return UserState.IllegalLogin;
-
-
+                        
             if (!UserExists(user))
             {
-
-                if (File.Exists(userPath))
-                {
-                    FileStream fs = new FileStream(userPath, FileMode.Append, FileAccess.Write);
-                    Users.Add(user);
-
-                    if (fs.CanWrite)
+ 
+                    if (File.Exists(userPath))
                     {
-                        byte[] arrayToFile = Encoding.ASCII.GetBytes(Users.Last().ToString());
-                        fs.Write(arrayToFile, 0, arrayToFile.Length);
+                        FileStream fs = new FileStream(userPath, FileMode.Append, FileAccess.Write);
+                        Users.Add(user);
+
+                        if (fs.CanWrite)
+                        {
+                            byte[] arrayToFile = Encoding.ASCII.GetBytes(Users.Last().ToString());
+                            fs.Write(arrayToFile, 0, arrayToFile.Length);
+                        }
+
+                        fs.Flush();
+                        fs.Close();
+
                     }
-
-                    fs.Flush();
-                    fs.Close();
-
-                }
-                else
-                {
-                    FileStream fs = new FileStream(userPath, FileMode.Create, FileAccess.Write);
-                    Users.Add(user);
-                    if (fs.CanWrite)
+                    else
                     {
-                        byte[] arrayToFile = Encoding.ASCII.GetBytes(Users.Last().ToString());
-                        fs.Write(arrayToFile, 0, arrayToFile.Length);
+                        FileStream fs = new FileStream(userPath, FileMode.Create, FileAccess.Write);
+                        Users.Add(user);
+                        if (fs.CanWrite)
+                        {
+                            byte[] arrayToFile = Encoding.ASCII.GetBytes(Users.Last().ToString());
+                            fs.Write(arrayToFile, 0, arrayToFile.Length);
+                        }
+                        fs.Flush();
+                        fs.Close();
                     }
-                    fs.Flush();
-                    fs.Close();
-                }
+                
+
+
                 return UserState.UserCreated;
             }
-            else return UserState.UserAlreadyExists
+            else return UserState.UserAlreadyExists;
+
+
         }
 
         public void ContactToevoegen(User user, Contact contact)
         {
-
-            if (File.Exists(user.ContactFileLocation))
+            if (string.IsNullOrWhiteSpace(contact.Naam))
             {
-                FileStream fs = new FileStream(user.ContactFileLocation, FileMode.Append, FileAccess.Write);
-                user.Contacten.Add(contact);
-                if (fs.CanWrite)
-                {
-                    byte[] arrayToFile = Encoding.ASCII.GetBytes(contact.ToString());
-                    fs.Write(arrayToFile, 0, arrayToFile.Length);
-                }
-                fs.Flush();
-                fs.Close();
+                throw new Exception("Contact naam mag niet leeg zijn");
             }
-            else
-            {
-                FileStream fs = new FileStream(user.ContactFileLocation, FileMode.Create, FileAccess.Write);
 
-                user.Contacten.Add(contact);
-                if (fs.CanWrite)
+
+                if (File.Exists(user.ContactFileLocation))
                 {
-                    byte[] arrayToFile = Encoding.ASCII.GetBytes(contact.ToString());
-                    fs.Write(arrayToFile, 0, arrayToFile.Length);
+                    FileStream fs = new FileStream(user.ContactFileLocation, FileMode.Append, FileAccess.Write);
+                    user.Contacten.Add(contact);
+                    if (fs.CanWrite)
+                    {
+                        byte[] arrayToFile = Encoding.ASCII.GetBytes(contact.ToString());
+                        fs.Write(arrayToFile, 0, arrayToFile.Length);
+                    }
+                    fs.Flush();
+                    fs.Close();
                 }
+                else
+                {
+                    FileStream fs = new FileStream(user.ContactFileLocation, FileMode.Create, FileAccess.Write);
 
-                fs.Flush();
-                fs.Close();
-            }
+                    user.Contacten.Add(contact);
+                    if (fs.CanWrite)
+                    {
+                        byte[] arrayToFile = Encoding.ASCII.GetBytes(contact.ToString());
+                        fs.Write(arrayToFile, 0, arrayToFile.Length);
+                    }
+
+                    fs.Flush();
+                    fs.Close();
+                }
+            
+
+
+
+
+
+
         }
 
         public void UserContacten(User user)
@@ -116,21 +136,25 @@ namespace Practicum18
             }
             else
             {
+
                 string[] alleContacten = File.ReadAllLines(user.ContactFileLocation);
-                user.Contacten.Clear();
-                string naam = string.Empty;
-                string telefoon = string.Empty;
-                string email = string.Empty;
+                    user.Contacten.Clear();
+                    string naam = string.Empty;
+                    string telefoon = string.Empty;
+                    string email = string.Empty;
 
-                foreach (var contact in alleContacten)
-                {
-                    string[] contactenArray = contact.Split('\t');
-                    naam = contactenArray[0];
-                    telefoon = contactenArray[1].Substring(11);
-                    email = contactenArray[2].Substring(7);
+                    foreach (var contact in alleContacten)
+                    {
+                        string[] contactenArray = contact.Split('\t');
+                        naam = contactenArray[0];
+                        telefoon = contactenArray[1].Substring(11);
+                        email = contactenArray[2].Substring(7);
 
-                    user.Contacten.Add(new Contact { Naam = naam, TelefoonNummer = telefoon, EmailAdress = email });
-                }
+                        user.Contacten.Add(new Contact { Naam = naam, TelefoonNummer = telefoon, EmailAdress = email });
+                    }
+
+
+
             }
         }
 
@@ -140,15 +164,17 @@ namespace Practicum18
             if (!File.Exists(userPath)) return;
             if (new FileInfo(userPath).Length != 0)
             {
-                string[] allUsers = File.ReadAllLines(userPath);
-                Users.Clear();
 
-                foreach (var user in allUsers)
-                {
-                    string[] userInfo = user.Split('/');
+                    string[] allUsers = File.ReadAllLines(userPath);
+                    Users.Clear();
 
-                    Users.Add(new User { Login = userInfo[0], Paswoord = userInfo[1], ContactFileLocation = userInfo[2] });
-                }
+                    foreach (var user in allUsers)
+                    {
+                        string[] userInfo = user.Split('/');
+
+                        Users.Add(new User { Login = userInfo[0], Paswoord = userInfo[1], ContactFileLocation = userInfo[2] });
+                    }
+                
             }
             else return;
         }
@@ -163,9 +189,11 @@ namespace Practicum18
         }
 
         //Function to see if Pasword has special characters
-        public bool HasSpecialCharacters(string pw)
+        public bool HasSpecialCharacters(string login)
         {
-            if (pw.Any(ch => !Char.IsLetterOrDigit(ch))) return true;
+            //True if login has special character
+            //False if login has no special character
+            if (login.Any(ch => !Char.IsLetterOrDigit(ch))) return true;
             else return false;
         }
     }

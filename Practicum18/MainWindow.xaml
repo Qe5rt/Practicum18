@@ -11,16 +11,16 @@
         <Label Content="Paswoord" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtGebruiker" HorizontalAlignment="Left" Height="23" Margin="138,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="txtPaswoord" HorizontalAlignment="Left" Height="23" Margin="138,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnMaakAan" Content="Maak aan" HorizontalAlignment="Left" Margin="263,14,0,0" VerticalAlignment="Top" Width="75"  />
-        <Button x:Name="btnLogIn" Content="Log in" HorizontalAlignment="Left" Margin="263,44,0,0" VerticalAlignment="Top" Width="75"  />
+        <Button x:Name="btnMaakAan" Content="Maak aan" HorizontalAlignment="Left" Margin="263,14,0,0" VerticalAlignment="Top" Width="75" Click="btnMaakAan_Click"  />
+        <Button x:Name="btnLogIn" Content="Log in" HorizontalAlignment="Left" Margin="263,44,0,0" VerticalAlignment="Top" Width="75" Click="btnLogIn_Click"  />
         <Label x:Name="lblWelkomUser" Content="" HorizontalAlignment="Left" Margin="361,16,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnLogUit" Content="Log uit" HorizontalAlignment="Left" Margin="423,43,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.384,-0.382"  />
+        <Button x:Name="btnLogUit" Content="Log uit" HorizontalAlignment="Left" Margin="423,43,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.384,-0.382" Click="btnLogUit_Click"  />
         <Label Content="Naam" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top"/>
         <Label Content="Telefoonnummer" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtNaam" HorizontalAlignment="Left" Height="23" Margin="138,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="txtTelefoonNummer" HorizontalAlignment="Left" Height="23" Margin="138,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Email" HorizontalAlignment="Left" Margin="263,95,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnMaakContact" Content="Contact Aanmaken" HorizontalAlignment="Left" Margin="375,128,0,0" VerticalAlignment="Top" Width="123"  />
+        <Button x:Name="btnMaakContact" Content="Contact Aanmaken" HorizontalAlignment="Left" Margin="375,128,0,0" VerticalAlignment="Top" Width="123" Click="btnMaakContact_Click"  />
         <TextBox x:Name="txtEmail" HorizontalAlignment="Left" Height="23" Margin="301,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197"/>
         <ListBox x:Name="lstContacten" HorizontalAlignment="Left" Height="153" Margin="10,156,0,0" VerticalAlignment="Top" Width="488"/>
     </Grid>

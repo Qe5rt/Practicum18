@@ -17,8 +17,6 @@ namespace Practicum18
 
         }
 
-
-
         public List<Contact> Contacten { get; set; }
         public string Login { get; set; }
 
